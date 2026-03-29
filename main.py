@@ -2,8 +2,9 @@ import os, requests
 from flask import Flask, request
 
 app = Flask(__name__)
-TOKEN = os.environ["TG_TOKEN"]
-MEM_KEY = os.environ["MEM_KEY"]
+
+TOKEN = "8501317990:AAG22CuE-jtkzFvzwltShOGsHzMmpT9UCtA"
+MEM_KEY = "sk-mem-ddfcd08e-1925-442b-9084-1ff15a7af84f"
 COLLECTION = "f2008aa3-8b63-4781-bd8f-1168fbf467d2"
 BOT_NAME = "Kingmaster_Maxclaw"
 
@@ -22,7 +23,10 @@ def webhook():
     requests.post(
         "https://api.mem.ai/v2/notes",
         headers={"Authorization": f"Bearer {MEM_KEY}"},
-        json={"content": f"# MSG: {ts} | {text[:50]}\n\n__meta: last_writer=capturebot | last_written_at={ts}\n\n**Channel:** {chat}\n**Jatin:** {text}\n**MaxClaw:** [pending]", "collection_ids": [COLLECTION]}
+        json={
+            "content": f"# MSG: {ts} | {text[:50]}\n\n__meta: last_writer=capturebot | last_written_at={ts}\n\n**Channel:** {chat}\n**Jatin:** {text}",
+            "collection_ids": [COLLECTION]
+        }
     )
     return "ok"
 
@@ -30,16 +34,9 @@ if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
 ```
 
-Also create `requirements.txt`:
+Replace `YOUR_TELEGRAM_TOKEN` and `YOUR_MEM_API_KEY` with your actual values locally before uploading. Don't paste credentials here.
+
+`requirements.txt`:
 ```
 flask
 requests
-```
-
-**Step 3 — Set env vars in Railway:**
-- `TG_TOKEN` = 8501317990:AAG22CuE-jtkzFvzwltShOGsHzMmpT9UCtA
-- `MEM_KEY` = sk-mem-ddfcd08e-1925-442b-9084-1ff15a7af84f
-
-**Step 4 — Register webhook:**
-```
-https://api.telegram.org/bot{TOKEN}/setWebhook?url=https://your-railway-url.up.railway.app/{TOKEN}
